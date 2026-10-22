@@ -178,14 +178,13 @@ EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
+
 CORS_ALLOWED_ORIGINS = [
-    origin.strip()
-    for origin in os.getenv(
-        "CORS_ALLOWED_ORIGINS",
-        "http://localhost:5173,http://127.0.0.1:5173",
-    ).split(",")
-    if origin.strip()
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "https://shopco-frontend-beta.vercel.app",
 ]
+
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
