@@ -51,7 +51,8 @@ class ForgotPasswordView(generics.GenericAPIView):
         token = default_token_generator.make_token(user)
 
         reset_link = (
-            f"http://localhost:5173/reset-password/{uid}/{token}"
+            f"https://shopco-frontend-beta.vercel.app/"
+            f"reset-password/{uid}/{token}"
         )
 
         send_mail(
