@@ -9,8 +9,10 @@ from django.core.mail import send_mail
 from django.utils.encoding import force_bytes,force_str
 from django.utils.http import urlsafe_base64_encode ,urlsafe_base64_decode
 
-
 from .serializers import RegisterSerializer ,  UserSerializer
+
+import os
+import resend
 
 
 User = get_user_model()
@@ -55,19 +57,33 @@ class ForgotPasswordView(generics.GenericAPIView):
             f"reset-password/{uid}/{token}"
         )
 
-        send_mail(
-            subject="Reset your password",
-            message=(
-                f"Hello {user.first_name},\n\n"
-                f"Click the link below to reset your password:\n\n"
-                f"{reset_link}\n\n"
-                f"If you did not request a password reset, you can ignore this email."
+        # send_mail(
+        #     subject="Reset your password",
+        #     message=(
+        #         f"Hello {user.first_name},\n\n"
+        #         f"Click the link below to reset your password:\n\n"
+        #         f"{reset_link}\n\n"
+        #         f"If you did not request a password reset, you can ignore this email."
+        #     ),
+        #     # from_email="noreply@shopco.com",
+        #     from_email=None,
+        #     recipient_list=[user.email],
+        #     fail_silently=False,
+        # )
+
+        resend.api_key = os.getenv("RESEND_API_KEY")
+
+        resend.Emails.send({
+           "from": "SHOP.CO <onboarding@resend.dev>",
+           "to": [user.email],
+           "subject": "Reset your SHOP.CO password",
+           "text": (
+              f"Hello {user.first_name},\n\n"
+              f"Click the link below to reset your password:\n\n"
+              f"{reset_link}\n\n"
+              "If you did not request a password reset, you can ignore this email."
             ),
-            # from_email="noreply@shopco.com",
-            from_email=None,
-            recipient_list=[user.email],
-            fail_silently=False,
-        )
+        })
 
         return Response(
             {
