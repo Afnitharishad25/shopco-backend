@@ -57,20 +57,6 @@ class ForgotPasswordView(generics.GenericAPIView):
             f"reset-password/{uid}/{token}"
         )
 
-        # send_mail(
-        #     subject="Reset your password",
-        #     message=(
-        #         f"Hello {user.first_name},\n\n"
-        #         f"Click the link below to reset your password:\n\n"
-        #         f"{reset_link}\n\n"
-        #         f"If you did not request a password reset, you can ignore this email."
-        #     ),
-        #     # from_email="noreply@shopco.com",
-        #     from_email=None,
-        #     recipient_list=[user.email],
-        #     fail_silently=False,
-        # )
-
         resend.api_key = os.getenv("RESEND_API_KEY")
 
         resend.Emails.send({
